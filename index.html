@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>给 ZXY ✉️</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+            width: 90%;
+            max-width: 420px;
+            margin: 20px;
+            transition: all 0.5s ease;
+        }
+
+        /* 专门为毕业合影设计的竖版圆角照片框 */
+        .photo-area {
+            width: 100%;
+            height: 350px;
+            margin: 0 auto 25px;
+            border-radius: 12px;
+            /* 自动读取同目录下的 IMG_7662.jpg */
+            background-image: url('IMG_7662.jpg'); 
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 4px solid #fff;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        p {
+            color: #555;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 0px;
+        }
+
+        .signature {
+            font-weight: 500;
+            color: #666;
+            text-align: right;
+            display: block;
+            margin-top: 15px;
+        }
+
+        .buttons {
+            margin-top: 35px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            font-size: 1.05rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+        }
+
+        #yes-btn {
+            background-color: #333;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        #yes-btn:hover {
+            transform: translateY(-2px);
+            background-color: #444;
+        }
+
+        #no-btn {
+            background-color: transparent;
+            color: #888;
+            border: 1px solid #ddd;
+            position: relative;
+        }
+
+        /* 飘落特效 */
+        .petal {
+            position: absolute;
+            color: #ffb3c1;
+            font-size: 18px;
+            animation: floatUp 3s linear infinite;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="main-card">
+        <div class="photo-area"></div>
+        
+        <h1 id="title">ZXY，你好呀 😊</h1>
+        <p id="desc">
+            这个周末，想邀请你一起出来走走。
+            <br>
+            只是想和你待在一起，认真地聊聊天。
+            <br>
+            <span class="signature" id="sig">—— LJC</span>
+        </p>
+        <div class="buttons">
+            <button class="btn" id="yes-btn">好呀 😊</button>
+            <button class="btn" id="no-btn">不要 😜</button>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('no-btn');
+        const yesBtn = document.getElementById('yes-btn');
+        const title = document.getElementById('title');
+        const desc = document.getElementById('desc');
+        const sig = document.getElementById('sig');
+
+        // 1. 互动：“不要”按钮在鼠标悬停或触摸时躲避
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', moveButton); // 适配手机端
+
+        function moveButton(e) {
+            e.preventDefault(); // 阻止手机端的默认点击
+            const padding = 50;
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+            if (noBtn.style.position !== 'absolute') {
+                noBtn.style.position = 'absolute';
+            }
+
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        // 2. 点击“好呀”
+        yesBtn.addEventListener('click', () => {
+            title.innerHTML = "ZXY ❤️ LJC <br> 约定达成";
+            desc.innerHTML = "那我们不见不散！✨<br>稍后我会和你商量具体的时间和地点。";
+            sig.style.display = 'none'; 
+            noBtn.style.display = 'none'; 
+            yesBtn.style.display = 'none'; 
+            
+            // 飘落爱心
+            setInterval(createPetal, 150);
+        });
+
+        // 3. 爱心飘落动画
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            petal.innerHTML = '❤️'; // 改成了爱心
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.animationDuration = Math.random() * 2 + 2 + 's'; 
+            petal.style.fontSize = Math.random() * 15 + 10 + 'px';
+            document.body.appendChild(petal);
+
+            setTimeout(() => {
+                petal.remove();
+            }, 3000);
+        }
+
+        // 默认背景中缓缓飘落爱心
+        setInterval(createPetal, 1500);
+    </script>
+</body>
+</html>
